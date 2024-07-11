@@ -1,3 +1,3 @@
-# Montar-lanche
+# Base Montar Lanche
 
-Projeto feito com Vuejs
+Repositório base para projeto em Vue
