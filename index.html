@@ -35,11 +35,12 @@
                         <div class="col">
                             <!--propriedades computadas-->
                             <img :src="pao[0]">
-                            <img :src="alface">
-                            <img :src="ketchup">
-                            <img :src="mostarda">
-                            <img :src="maionese">
-                            <img :src="hamburguer">
+                            <img v-if="ingredientesSelecionados.salada.includes('alface')" :src="alface">
+                            <img v-if="ingredientesSelecionados.molhos.includes('ketchup')" :src="ketchup">
+                            <img v-if="ingredientesSelecionados.molhos.includes('mostarda')" :src="mostarda">
+                            <img v-if="ingredientesSelecionados.molhos.includes('maionese')" :src="maionese">
+                            <img v-if="ingredientesSelecionados.hamburguer" :src="hamburguer">
+
                             <img :src="pao[1]">
                         </div>
                     </div>
@@ -227,6 +228,25 @@
                     </div>
                 </div> <!-- fim col md 6 -->
 
+                <!-- <div class="col-md-6">
+                    <div class="row mt-2">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-header">Ingredientes Selecionados</div>
+                                <div class="card-body">
+                                    <h5>Pão: {{ ingredientesSelecionados.pao[0] }}</h5>
+                                    <h5>Hambúrguer: {{ ingredientesSelecionados.hamburguer }}</h5>
+                                    <h5>Salada: <span v-if="ingredientesSelecionados.salada.length > 0">{{
+                                            ingredientesSelecionados.salada.join(', ') }}</span></h5>
+                                    <h5>Molhos: <span v-if="ingredientesSelecionados.molhos.length > 0">{{
+                                            ingredientesSelecionados.molhos.join(', ') }}</span></h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+
                 <div class="col-md-6" v-if="etapa == 3">
                     <!-- Pedido Confirmado -->
                     <div class="row mt-2">
@@ -274,6 +294,12 @@
                 inputMolhos: [],
                 inputHamburguer: '',
                 etapa: 1, // v-if
+                ingredientesSelecionados: {
+                    pao: [''],
+                    salada: ['alface'], // ou uma lista com outros itens se forem selecionados
+                    molhos: ['ketchup', 'mostarda'], // lista de molhos selecionados
+                    hamburguer: 'bovino' // tipo de hambúrguer escolhido
+                },
                 inputNome: '',
                 inputEndereco: '',
                 novoPedidoAssincrono: null
@@ -330,12 +356,17 @@
             },
             methods: {
                 fazerPedido() {
-                    //se Pao e Carne definidos
                     if (this.inputTipoPao && this.inputHamburguer) {
-                        this.etapa = 2 //avança p/ etapa Fechar pedido
-                    }
-                    else {
-                        alert('É necessário selecionar um tipo de pão e um tipo de carne para seguir com pedido!')
+                        // Atualiza os ingredientes selecionados
+                        this.ingredientesSelecionados = {
+                            pao: this.pao,
+                            salada: this.inputSalada,
+                            molhos: this.inputMolhos,
+                            hamburguer: this.inputHamburguer,
+                        };
+                        this.etapa = 2; // Avança para a próxima etapa
+                    } else {
+                        alert('É necessário selecionar um tipo de pão e um tipo de carne para seguir com pedido!');
                     }
                 },
                 confirmarPedido() {
